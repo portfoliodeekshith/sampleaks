@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-hello-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-hello
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: flask-hello
+        tier: frontend
+    spec:
+      containers:
+        - name: flask-hello-container
+          image: deekshithreddy250/myimage 
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5000
+      targetPort: 5000
+  selector:
+    app: flask-hello
+    tier: frontend
